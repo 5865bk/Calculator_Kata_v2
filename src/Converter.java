@@ -8,7 +8,7 @@ public class Converter {
                 return i + 1;
             }
         }
-        throw new IllegalAccessException("Некорректное введение римских цифр");
+        throw new IllegalAccessException("Некорректное введение данных");
     }
     public static String toRome(int a) {
         String result = "";

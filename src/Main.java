@@ -3,10 +3,9 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class Main {
-    private static final Range RANGE = new Range(1, 10);
     private static final List<String> SINGS = Arrays.asList("+", "-", "/", "*");
     private static final Predicate<String> IS_SING = SINGS::contains;
-    private static final Predicate<Integer> IS_DIGIT_IN_RANGE = digit -> digit > RANGE.getMin() && digit <= RANGE.getMax();
+
 
     public static String calc(String input) throws IllegalAccessException {
         var arrayOfExpression = input.split(" ");
@@ -32,14 +31,18 @@ public class Main {
         checkDigitRange(firstNumber, secondNumber);
 
         var result = Expression.count(firstNumber, secondNumber, sign);
-        return isArabDigit
-                ? String.valueOf(result)
-                : Converter.toRome(result);
+        if (!isArabDigit) {
+            if (result <= 0) {
+                throw new IllegalArgumentException("Результат выражения с римскими числами не может быть меньше или равен нулю.");
+            }
+        }
+        return isArabDigit ? String.valueOf(result) : Converter.toRome(result);
+
     }
 
     private static void checkDigitRange(int firstNumber, int secondNumber) {
-        if (!IS_DIGIT_IN_RANGE.test(firstNumber) && !IS_DIGIT_IN_RANGE.test(secondNumber)) {
-            throw new IllegalArgumentException("Диапазон чисел должен быть в " + RANGE.getRange());
+        if (firstNumber < 1 || firstNumber > 10 || secondNumber < 1 || secondNumber > 10) {
+            throw new IllegalArgumentException("Диапазон чисел должен быть от 0 до 10.");
         }
     }
 
@@ -55,5 +58,4 @@ public class Main {
             throw new IllegalArgumentException("Неправильно введено выражение");
         }
     }
-
 }
